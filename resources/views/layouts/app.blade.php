@@ -92,9 +92,9 @@
     </div>
     
     <!-- Footer -->
-    <div class="fixed bottom-4 right-4 bg-white/90 backdrop-blur-sm px-4 py-2 rounded-full shadow-lg border border-army-green-200">
+    {{-- <div class="fixed bottom-4 right-4 bg-white/90 backdrop-blur-sm px-4 py-2 rounded-full shadow-lg border border-army-green-200">
         <span class="text-sm text-army-green-600 font-medium">Paid & Mic</span>
-    </div>
+    </div> --}}
 
     <!-- Scripts -->
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>

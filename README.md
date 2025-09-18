@@ -36,5 +36,27 @@ Membantu pengguna dalam mengarsipkan, mengelola, dan mengakses surat-surat penti
 Pastikan Anda memiliki PHP versi 8.2 atau lebih baru dan ekstensi yang diperlukan oleh Laravel.
 
 ---
+## Dokumentasi
+Halaman Utama Arsip
+![Dashboard](assets/img/arsip.png)
+Halaman Tambah Arsip
+![Tambah Arsip](assets/img/tambah_arsip.png)
+Halaman Edit Arsip
+![Edit Arsip](assets/img/edit_surat.png)
+Halaman Hapus Arsip
+![Hapus Arsip](assets/img/form_konfirm.png)
+Halaman Lihat Arsip
+![Lihat Arsip](assets/img/lihat_arsip.png)
+Halaman Utama Kategori Arsip
+![Dashboard](assets/img/kategori_surat.png)
+Halaman Tambah Kategori
+![Tambah Kategori](assets/img/tambah_kategori_surat.png)
+Halaman Edit Kategori
+![Edit Kategori](assets/img/edit_kategori_surat.png)
+Halaman Hapus Kategori
+![Hapus Kategori](assets/img/hapus_kategori.png)
+Halaman About
+![About](assets/img/about.png)
 
+---
 Dibangun dengan Laravel Framework versi 12.

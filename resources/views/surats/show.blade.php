@@ -57,6 +57,10 @@
            class="px-5 py-2 rounded-lg bg-amber-500 hover:bg-amber-600 text-white font-medium shadow">
             📥 Unduh PDF
         </a>
+        <a href="{{ route('surats.edit', $surat->id) }}" 
+           class="px-5 py-2 rounded-lg bg-blue-600 hover:bg-blue-700 text-white font-medium shadow">
+            ✏️ Edit Surat
+        </a>
         <button onclick="confirmDelete({{ $surat->id }})" 
                 class="px-5 py-2 rounded-lg bg-red-600 hover:bg-red-700 text-white font-medium shadow">
             🗑️ Hapus Surat

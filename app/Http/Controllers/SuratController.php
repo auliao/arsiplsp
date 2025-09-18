@@ -7,6 +7,9 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Response;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Validation\Rule;
+use Illuminate\Support\Str;
 
 class SuratController extends Controller
 {
@@ -166,5 +169,85 @@ class SuratController extends Controller
         }
         
         return round($bytes, 2) . ' ' . $units[$i];
+    }
+    public function edit($id)
+    {
+        $surat = Surat::findOrFail($id);
+
+        return view('surats.edit', compact('surat'));
+    }
+
+    /**
+     * Update the specified surat in storage.
+     */
+    public function update(Request $request, $id)
+    {
+        $surat = Surat::findOrFail($id);
+
+        // Validasi input
+        $request->validate([
+            'nomor_surat' => [
+                'required',
+                'string',
+                'max:255',
+                Rule::unique('surats', 'nomor_surat')->ignore($surat->id)
+            ],
+            'kategori' => 'required|string|max:255',
+            'judul' => 'required|string|max:1000',
+            'file' => 'nullable|file|mimes:pdf|max:10240', // 10MB max
+        ], [
+            'nomor_surat.required' => 'Nomor surat harus diisi.',
+            'nomor_surat.unique' => 'Nomor surat sudah digunakan.',
+            'kategori.required' => 'Kategori harus dipilih.',
+            'judul.required' => 'Judul surat harus diisi.',
+            'file.mimes' => 'File harus berformat PDF.',
+            'file.max' => 'Ukuran file tidak boleh lebih dari 10MB.',
+        ]);
+
+        try {
+            DB::beginTransaction();
+
+            // Update data surat
+            $surat->nomor_surat = $request->nomor_surat;
+            $surat->kategori = $request->kategori;
+            $surat->judul = $request->judul;
+
+            // Handle file upload jika ada file baru
+            if ($request->hasFile('file')) {
+                // Hapus file lama jika ada
+                if ($surat->file_path && Storage::disk('public')->exists($surat->file_path)) {
+                    Storage::disk('public')->delete($surat->file_path);
+                }
+
+                // Upload file baru
+                $file = $request->file('file');
+                $filename = time() . '_' . Str::slug(pathinfo($file->getClientOriginalName(), PATHINFO_FILENAME)) . '.pdf';
+                $filePath = $file->storeAs('surat_files', $filename, 'public');
+
+                $surat->file_path = $filePath;
+                $surat->nama_file = $file->getClientOriginalName();
+            }
+
+            $surat->save();
+
+            DB::commit();
+
+            return redirect()
+                ->route('surats.show', $surat->id)
+                ->with('success', 'Surat berhasil diperbarui!');
+
+        } catch (\Exception $e) {
+            DB::rollback();
+
+            // Hapus file yang baru diupload jika terjadi error
+            if (isset($filePath) && Storage::disk('public')->exists($filePath)) {
+                Storage::disk('public')->delete($filePath);
+            }
+
+            return redirect()
+                ->back()
+                ->withInput()
+                ->with('error', 'Terjadi kesalahan saat memperbarui surat: ' . $e->getMessage());
+        }
     }
 }
